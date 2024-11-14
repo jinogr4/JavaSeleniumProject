@@ -1,0 +1,32 @@
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite parallel = "tests" name ="Suite">
+	
+	<groups>
+		<run>
+			<include name="Regression"></include>
+		</run>
+	</groups>
+	
+	
+	
+	<listeners>
+		<listener class-name="GR.TestComponents.Listeners"/>
+	</listeners>
+	
+  <test thread-count="5" name="ProductsErrorMessageValidationTest">
+    <classes>
+      <class name="GR.Tests.ProductsErrorMessageValidationTest"/>
+    </classes>
+  </test> <!-- Test -->
+    <test thread-count="5" name="LoginPageErrorMessageValidationTest">
+    <classes>
+      <class name="GR.Tests.LoginPageErrorMessageValidationTest"/>
+    </classes>
+  </test> <!-- Test -->
+    <test thread-count="5" name="EcomerceOrderPlacingTest">
+    <classes>
+      <class name="GR.Tests.EcomerceOrderPlacingTest"/>
+    </classes>
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

@@ -1,4 +1,4 @@
-package GR.SeleniumProject;
+package GR.Pages;
 
 import java.util.List;
 
@@ -28,11 +28,10 @@ public class ProductCatalouge extends AbstractPage{
 	@FindBy(xpath = "//div[@class='card-body']//b")
 	List<WebElement> Products;
 	
-	@FindBy(xpath = "//button[@routerlink='/dashboard/cart']")
-	WebElement CartBtn;
 	
-	By ProductBy = By.xpath("//div[@class='card-body']//b");
-	By CartButton = By.xpath("//button[@routerlink='/dashboard/cart']");
+	
+	public static By ProductBy = By.xpath("//div[@class='card-body']//b");
+	public static By AddToCartBtn = By.xpath("//button[@class='btn w-10 rounded']");
 	
 	
 	
@@ -46,17 +45,19 @@ public class ProductCatalouge extends AbstractPage{
 	
 	public void AddProductsToCart(List<WebElement> products, List<String> buyItems)
 	{
+		//PC.WaitForInvisiblityOfElement(AbstractPage.LoadIcon);
+	    WaitUntilElementToBeClicable(AbstractPage.CartButton);
+	    WaitUntilElementToBeClicable(AddToCartBtn);
 		for( int i=0; i< products.size(); i++ )
 		{
 		    String item = products.get(i).getText().trim();
 			if(buyItems.contains(item))
 			{
+				WaitForInvisiblityOfElement(AbstractPage.LoadIcon);
 				//products.get(i).findElement(By.xpath("//button[@class='btn w-10 rounded']")).click();
 				driver.findElement(By.xpath("//b[text()='" + item + "']/../following-sibling::button[@class='btn w-10 rounded']")).click();
 				WaitForVisibilityOfElement(AbstractPage.LoadIcon);
 				WaitForInvisiblityOfElement(AbstractPage.LoadIcon);
-				WaitUntilElementToBeClicable(CartButton);
-
 
 			}
 		}	

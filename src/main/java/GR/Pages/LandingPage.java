@@ -1,4 +1,4 @@
-package GR.SeleniumProject;
+package GR.Pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -35,16 +35,20 @@ public class LandingPage extends AbstractPage{
 	@FindBy(id = "login")
 	WebElement LoginBtn;
 	
+	public static By LoginBtnBy = By.id("login");
 	
 	public void GoTo()
 	{
 		driver.get("https://rahulshettyacademy.com/client");
 	}
 	
-	public void LoginApplication(String email, String password)
+	public ProductCatalouge LoginApplication(String email, String password) throws InterruptedException
 	{
+		ProductCatalouge PC = new ProductCatalouge(driver);
+		Thread.sleep(2000);
 		UserEmailTxt.sendKeys(email);
 		UserPasswordTxt.sendKeys(password);
-		LoginBtn.click();		
+		LoginBtn.click();
+		return PC;
 	}
 }

@@ -1,4 +1,4 @@
- package GR.SeleniumProject;
+ package GR.Tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
@@ -16,26 +16,26 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import GR.Abstract.AbstractPage;
-
-public class EcomerceOrderPlacing{
+public class StandAloneTest {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		System.out.println("Test Start");
 		WebDriverManager.chromedriver().setup();
 		WebDriver driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-		
+		driver.get("https://rahulshettyacademy.com/client");
 				
-		LandingPage landingPage = new LandingPage(driver);
-		landingPage.GoTo();
-		landingPage.LoginApplication("techworld7982@gmail.com", "Jinjin@123");
+		//LandingPage landingPage = new LandingPage(driver);
+		 // Login 
+		driver.findElement(By.id("userEmail")).sendKeys("techworld7982@gmail.com");
+		driver.findElement(By.id("userPassword")).sendKeys("Jinjin@123");
+		driver.findElement(By.id("login")).click();
 		
-		ProductCatalouge PC = new ProductCatalouge(driver);
 		// Add products to Cart
-		List<WebElement> products = PC.GetProducts();
+		List<WebElement> products = driver.findElements(By.xpath("//div[@class='card-body']//b"));
 
 		String item;
 		//String buyItems = "ADIDAS ORIGINAL, IPHONE 13 PRO";
@@ -43,14 +43,27 @@ public class EcomerceOrderPlacing{
 			
 		// Add items to Cart
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		PC.WaitForInvisiblityOfElement(By.xpath("//div[@class='ng-tns-c31-1 ng-star-inserted']"));
-	    PC.WaitUntilElementToBeClicable(By.xpath("//button[@routerlink='/dashboard/cart']"));
+	    //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='ng-tns-c31-1 ng-star-inserted']")));
+	    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='ng-tns-c31-1 ng-star-inserted']")));
+	    wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@routerlink='/dashboard/cart']")));
 	    
-	    PC.AddProductsToCart(products, buyItems);
-				
+		for( int i=0; i< products.size(); i++ )
+		{
+		     item = products.get(i).getText().trim();
+			if(buyItems.contains(item))
+			{
+				//products.get(i).findElement(By.xpath("//button[@class='btn w-10 rounded']")).click();
+				driver.findElement(By.xpath("//b[text()='" + item + "']/../following-sibling::button[@class='btn w-10 rounded']")).click();
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='ng-tns-c31-1 ng-star-inserted']")));
+			    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//div[@class='ng-tns-c31-1 ng-star-inserted']")));
+			    wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@routerlink='/dashboard/cart']")));
+
+			}
+		}	
+		
 		// Navigate to Cart
 	    
-		PC.CartBtn.click();
+		driver.findElement(By.xpath("//button[@routerlink='/dashboard/cart']")).click();
 				
 		// Verify Cart products
 		List<WebElement> cartProducts = driver.findElements(By.xpath("//div[@class='cartSection']/h3"));				
